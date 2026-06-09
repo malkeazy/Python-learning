@@ -11,16 +11,25 @@ def return_past_notes(storage_file: str):
     except json.JSONDecodeError:
         return None
 
-def add_note(storage_file: str, new_note: str) -> str:
+def add_note(storage_file: str, new_note: str):
     past_notes = return_past_notes(storage_file)
     with open(storage_file, 'w', encoding='utf-8') as notes_json:
         past_notes.append(new_note)
         json.dump(past_notes, notes_json, indent=4, ensure_ascii=False)
-    return "\nЗаметка успешно добавлена\n"
+    print("\nЗаметка успешно добавлена\n")
 
-def delete_note(storage_file: str, number_str: int):
+def delete_note(storage_file: str, number_int: int):
     past_notes = return_past_notes(storage_file)
-    with open(storage_file, 'w', encoding='utf-8') as notes_json:
-        past_notes.remove(number_str-1)
-        json.dump(past_notes, notes_json, indent=4, ensure_ascii=False)
-    print("\nЗаметка успешно удалена\n")
+    if number_int > 0:
+        del past_notes[number_int - 1]
+    else:
+        print("Заметка не удалена, введен неверный номер1")
+        return None
+
+    try:
+        with open(storage_file, 'w', encoding='utf-8') as notes_json:
+            json.dump(past_notes, notes_json, indent=4, ensure_ascii=False)
+        print("\nЗаметка успешно удалена\n")
+    except FileNotFoundError:
+        print("\nФайл не найден, попробуйте для начала добавить заметку\n")
+        return None
