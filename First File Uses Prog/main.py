@@ -40,13 +40,13 @@ while True:
             else:
                 print("\nФайл еще не имеет заметок создайте пожалуйста")
         elif user_consent == 2:
-            storage.add_note(file_locate, input("\nВведите новую заметку:"))
+            storage.add_note(file_locate, input("\nВведите новую заметку:"), past_notes)
             print("\nЗаметка успешно добавлен")
         elif user_consent == 3:
             if len(past_notes) > 0:
                 number_note = int(input("\nВведите номер заметки:"))
                 if number_note > 0:
-                    storage.delete_note(file_locate, number_note)
+                    storage.delete_note(file_locate, number_note, past_notes)
                     print("\nЗаметка успешно удалена")
                 else:
                     print("\nЗаметка не удалена, введен неверный номер")
