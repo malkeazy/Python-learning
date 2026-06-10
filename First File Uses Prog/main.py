@@ -1,9 +1,29 @@
-import storage, json
+import storage, json, os
 
 while True:
     file_locate = "data/notes.json"
-    past_notes = storage.return_past_notes(file_locate)
-
+    try:
+        past_notes = storage.return_past_notes(file_locate)
+    except json.JSONDecodeError:
+        choose = (input("\nФайл повреджден\n"
+                             "1.Удалить файл и создать заново\n"
+                             "0.Выход из программы\n"
+                             "Выберете вариант:"))
+        if choose == "1":
+            try:
+                os.remove(file_locate)
+                print("Файл успешно удален")
+            except FileNotFoundError:
+                print("Файл уже отсутствует")
+            except PermissionError:
+                print("Недостаточно прав для удаления файла")
+            past_notes = []
+            continue
+        elif choose == "0":
+            break
+        else:
+            print("Неверный выбор")
+            continue
     try:
         user_consent = int(input("\n1.Вывести все заметки\n"
                              "2.Добавить заметку\n"
@@ -20,11 +40,8 @@ while True:
             else:
                 print("\nФайл еще не имеет заметок создайте пожалуйста")
         elif user_consent == 2:
-            status_add_note = storage.add_note(file_locate, input("\nВведите новую заметку:"))
-            if status_add_note:
-                print("\nЗаметка успешно добавлен")
-            else:
-                print("\nЗаметка не добавлен")
+            storage.add_note(file_locate, input("\nВведите новую заметку:"))
+            print("\nЗаметка успешно добавлен")
         elif user_consent == 3:
             if len(past_notes) > 0:
                 number_note = int(input("\nВведите номер заметки:"))
