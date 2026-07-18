@@ -3,17 +3,17 @@ from typing import List
 
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
-        ind = 0
-        while ind < len(nums)-1:
-            if nums[ind] == nums[ind+1]:
-                del nums[ind]
-            else:
-                ind += 1
-        return len(nums)
+        slow = 0
+        for ind in range(len(nums)):
+            if nums[slow] != nums[ind]:
+                slow += 1
+                nums[slow] = nums[ind]
+        return slow + 1
 
 sol = Solution()
-nums = [0, 0, 1, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6]
-expected_nums = [0, 1, 2, 3, 4, 5, 6]
+nums = [7, 7, 7]
+print(sol.removeDuplicates(nums))
+expected_nums = [7]
 
 k = sol.removeDuplicates(nums)
 
